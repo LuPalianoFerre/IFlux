@@ -95,12 +95,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      let productos = JSON.parse(localStorage.getItem('productos')) || [];
-      let maxId = productos.reduce((max, p) => Math.max(max, p.id || 0), 0);
-      let nuevoId = maxId + 1;
 
-      productos.push({ id: nuevoId, nombre, precio });
-      localStorage.setItem('productos', JSON.stringify(productos));
+      const response = fetch('http://localhost:3000/productos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nombre, precio })
+      });
+
+
 
       alert('Producto creado correctamente!');
       nombreInput.value = '';

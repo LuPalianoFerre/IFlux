@@ -7,8 +7,27 @@ let selectedPayment = "efectivo"; // Forma de pago por defecto
 
 async function loadProductos() {
   try {
-    const response = await fetch("productos.json");
+    const response = await fetch("http://localhost:3000/productos", {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+
+    if (!response.ok) {
+      throw new Error("Error en la respuesta del servidor");
+    }
+
     const data = await response.json();
+    console.log(data);
+
+    productos = data || [];
+    
+
+    filteredProductos = productos;
+    renderProductCards();
+    /*const data = await response.json();
     productos = data.productos || [];
     
     // Si hay productos agregados en localStorage, mézclalos
@@ -17,10 +36,13 @@ async function loadProductos() {
     
     filteredProductos = productos;
     renderProductCards();
+    */
   } catch (e) {
     console.error("Error cargando productos:", e);
   }
 }
+
+
 
 function renderProductCards() {
   const list = document.getElementById("product-list");
@@ -54,7 +76,7 @@ function renderProductCards() {
   });
 
   const btnSeeMore = document.getElementById("btn-see-more");
-  if(btnSeeMore) {
+  if (btnSeeMore) {
     btnSeeMore.style.display = visibleCount >= filteredProductos.length ? "none" : "block";
   }
 }
